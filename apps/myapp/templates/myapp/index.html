@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Messenger</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:200,400,600,700|Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'myapp/css/styles.css' %}">
+</head>
+<body>
+    <!-- display: inline-block; height: 1rem; margin: auto; margin-left: 1rem;" -->
+    <nav>
+        <form action="/login" method="post">
+            {% csrf_token %}
+            <div class="row nav-row">
+                <div class="logo">
+                    <h1>Messenger</h1><span class="reaction">👍1</span>
+                </div>
+                <h4 style="color: #f1f0f0; margin: auto;">... a bit of a messenger clone. oops.</h4>
+                <div class="message sent login">
+                    <p class="login-cluster" style="margin: .2rem 0;"><input type="email" name="email" placeholder="Email"> <input type="password" name="password" placeholder="Password"> <button type="submit" class="login-button">Login</button></p>
+                </div>
+            </div>
+        </form>
+    </nav>
+    <div class="container">
+        <div class="row display-row">
+            <div class="people display-box-dark">
+                <div class="description">
+                    <h3>Messages</h3>
+                </div>
+                <a href="/">
+                    <div class="person row active">
+                        <img src="{% static 'myapp/images/profile-pic1.jpg' %}" alt="profile-photo">
+                        <div class="row person-info">
+                            <h3>Elizabeth Smith</h3>
+                            <p>You: Be there in 10 minutes.</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/">
+                    <div class="person row">
+                        <img src="{% static 'myapp/images/profile-pic2.jpeg' %}" alt="profile-photo">
+                        <div class="row person-info">
+                            <h3>Meghan Clark</h3>
+                            <p>Don't forgot about the meeting today. We need that account!</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/">
+                    <div class="person row">
+                        <img src="{% static 'myapp/images/profile-pic3.jpeg' %}" alt="profile-photo">
+                        <div class="row person-info">
+                            <h3>Joshua Tucker</h3>
+                            <p>Did you catch the rest of the game?</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/">
+                    <div class="person row">
+                        <img src="{% static 'myapp/images/profile-pic4.jpeg' %}" alt="profile-photo">
+                        <div class="row person-info">
+                            <h3>Paul Parsons</h3>
+                            <p>Hahaha. Awesome.</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/">
+                    <div class="person row">
+                        <img src="{% static 'myapp/images/profile-pic5.jpeg' %}" alt="profile-photo">
+                        <div class="row person-info">
+                            <h3>Emma Burgess</h3>
+                            <p>Check out this vintage tee I found!</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/">
+                    <div class="person row">
+                        <img src="{% static 'myapp/images/profile-pic6.jpeg' %}" alt="profile-photo">
+                        <div class="row person-info">
+                            <h3>Megan Ellison</h3>
+                            <p>The show is Friday at 7, tell Beth I'll be there. </p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/">
+                    <div class="person row">
+                        <img src="{% static 'myapp/images/profile-pic7.jpeg' %}" alt="profile-photo">
+                        <div class="row person-info">
+                            <h3>Keith Piper</h3>
+                            <p>Lol</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/">
+                    <div class="person row">
+                        <img src="{% static 'myapp/images/profile-pic8.jpeg' %}" alt="profile-photo">
+                        <div class="row person-info">
+                            <h3>Charles Dickens</h3>
+                            <p>That's easily one of my favorite songs, great choice.</p>
+                        </div>
+                    </div>    
+                </a>
+            </div>
+            <div class="messages-container">
+                <div class="messages display-box">
+                    {% if messages %}
+                        <div class="message-row message-group sent">
+                            {% for message in messages %}
+                                <div{% if message.tags %} class="{{ message.tags }} message sent"{% endif %}>
+                                    <p>{{ message }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <div class="message-row message-group received">
+                        <div class="message received">
+                            <p>Can you send that to me?</p>
+                        </div>
+                        <div class="message received">
+                            <p>No rush, I want to make it my profile picture!</p>
+                        </div>
+                    </div>
+                    <div class="message-row message-group sent">
+                        <div class="message sent">
+                            <p>Sorry!</p>
+                        </div>
+                        <div class="message sent">
+                            <p>It took a little while to edit, but here you go!</p>
+                        </div>
+                        <div class="message sent image">
+                            <img src="{% static 'myapp/images/profile-pic1.jpg' %}" alt="">
+                        </div>
+                    </div>
+                    <div class="message-row message-group received">
+                        <div class="message received">
+                            <p>What do you think about italian for dinner?</p>
+                        </div>
+                        <div class="message received">
+                            <p>There is a place not too far from us that has great reviews.</p>
+                        </div>
+                        <div class="message received image">
+                            <img src="{% static 'myapp/images/italian.jpg' %}" alt="john">
+                        </div>
+                    </div>
+                    <div class="message-row">
+                        <div class="message received">
+                            <p>..?</p>
+                        </div>
+                    </div>
+                    <div class="message-row message-group sent">
+                        <div class="message sent">
+                            <p>Sorry!</p>
+                        </div>
+                        <div class="message sent">
+                            <p>Just got out of the car.</p>
+                        </div>
+                        <div class="message sent">
+                            <p>Absolutely, can you send me the address? Thanks!</p>
+                        </div>
+                    </div>
+                    <div class="message-row">
+                        <div class="message sent">
+                            <p>Be there in 10 minutes.</p>
+                        </div>
+                    </div>
+                </div>
+                <form action="/" class="create">
+                    <input type="text" placeholder="Type a message...">
+                </form>
+            </div>
+        </div>
+        <div class="row divider" style="padding: 1rem;">
+            <a href="#register"  style="width: 100%; display: flex; justify-content: center;">
+                <div class="message sent" style="width: 100%; text-align: center; border-radius: 1.3rem 1.3rem .25rem 1.3rem;">
+                    <h2>Sign Up</h2>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div id="register">
+        <div class="display-box-dark registration">
+            <form action="/register" method="post">
+                {% csrf_token %}
+                <div class="registration-form">
+                    <label for="first_name">First Name:</label>
+                    <input type="text" name="first_name" id="first_name">
+                    <label for="last_name">Last Name:</label>
+                    <input type="text" name="last_name" id="last_name">
+                    <label for="email">Email:</label>
+                    <input type="email" name="email" id="email">
+                    <label for="password">Password:</label>
+                    <input type="password" name="password" id="password">
+                    <label for="confirm_password">Confirm Password:</label>
+                    <input type="password" name="confirm_password" id="confirm_password">
+                    <input type="submit" class="register-button" value="Register">
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

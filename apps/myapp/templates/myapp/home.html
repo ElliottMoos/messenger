@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:200,400,600,700|Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'myapp/css/styles.css' %}">
+    <style>
+        nav {
+            padding: 1% 2%;
+        }
+
+        .logo {
+            max-width: 50%;
+            padding-bottom: .5%;
+        }
+        .search-bar {
+            display: flex;
+            justify-content: space-between;
+            flex-basis: 10%;
+        }
+        .search-bar a {
+            margin: auto;
+            text-align: right;
+            flex-basis: 30%;
+            color: #09f;
+        }
+        .search-bar a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            width: 100%;
+            height: 91vh;
+            padding: 0;
+            margin: 0;
+        }
+        .people {
+            height: 87vh;
+        }
+        .description {
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            height: 3.5rem;
+        }
+        .description h3 {
+            flex-basis: 30%;
+        }
+        .description form {
+            display: flex;
+            flex-basis: 65%;
+        }
+        .description input {
+            flex-basis: 90%;
+            margin: auto;
+            border-style: none;
+            border-radius: .5rem;
+            box-sizing: border-box;
+            padding: 2%;
+            font-size: 1.3rem;
+            outline: none;
+        }
+        .messages {
+            height: 38rem;
+        }
+        .person p {
+            font-size: .8rem;
+        }
+        @media (max-width: 1000px) {
+            nav {
+                padding: 2% 3%;
+            }
+            .logo {
+                margin: 0;
+            }
+            .row.homerow {
+                flex-direction: column;
+            }
+            .people {
+                height: 38rem;
+            }
+            .messages-container {
+                height: 38rem;
+            }
+            .container {
+                min-height: 84rem;
+            }
+        }
+        @media (max-width: 750px) {
+            nav {
+                padding: 2% 3%;
+            }
+            .logo {
+                margin: 0;
+            }
+            .row.homerow {
+                flex-direction: column;
+            }
+            .people {
+                height: 38rem;
+            }
+            .messages-container {
+                height: 38rem;
+            }
+            .container {
+                min-height: 84rem;
+            }
+        }
+        @media (max-width: 550px) {
+            nav {
+                padding: 2% 3%;
+            }
+            .logo {
+                margin: 0;
+            }
+            .row.homerow {
+                flex-direction: column;
+            }
+            .people {
+                height: 38rem;
+            }
+            .messages-container {
+                height: 38rem;
+            }
+            .container {
+                min-height: 84rem;
+            }
+        }
+        @media (max-width: 420px) {
+            nav {
+                padding: 2% 3%;
+            }
+            .logo {
+                margin: 0;
+            }
+            .row.homerow {
+                flex-direction: column;
+            }
+            .people {
+                height: 38rem;
+            }
+            .messages-container {
+                height: 38rem;
+            }
+            .container {
+                min-height: 84rem;
+            }
+        }
+
+        @media (max-width: 320px) {
+            nav {
+                padding: 1%;
+            }
+            .logo {
+                margin: 0;
+            }
+            .row.homerow {
+                flex-direction: column;
+            }
+            .people {
+                height: 38rem;
+            }
+            .messages-container {
+                height: 38rem;
+            }
+            .container {
+                min-height: 84rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <form action="">
+            <div class="row nav-row">
+                <div class="logo">
+                    <h1>{{user.first_name}} {{user.last_name}}</h1>
+                </div>
+                <div class="search-bar">
+                    <a href="/logout">Logout</a>
+                </div>
+            </div>
+        </form>
+    </nav>
+    <div class="container">
+        <div class="row homerow">
+            <div class="people display-box-dark tabs">
+                <div data-target="#example" class="description">
+                    <h3 data-target="#example"><a href="/home/clear_receiver">Messages</a></h3>
+                    <form action="/search" method="post">
+                        {% csrf_token %}
+                        <input type="text" name="search" placeholder="Search Messages">
+                    </form>
+                </div>
+                {% if people%}
+                    {% for person in people %}
+                        {% with person.id as person_id %}
+                            {% if currentReceiver %}
+                                {% if person.id == currentReceiver %}
+                                    <a href="/home/change/{{person.id}}">
+                                        <div data-target="#person{{person.id}}" class="person row active">
+                                            <img data-target="#person{{person.id}}" src="{% static 'myapp/images/user.png' %}" alt="profile-photo">
+                                            <div data-target="#person{{person.id}}" class="row person-info">
+                                                <h3 data-target="#person{{person.id}}">{{person.first_name}} {{person.last_name}}</h3>
+                                                <p data-target="#person{{person.id}}">
+                                                    {% for key, conversation in conversations.items %}
+                                                        {% if key == person.id|stringformat:"i" %}
+                                                            {% if not conversation.last_message %}
+                                                                
+                                                            {% else %}
+                                                                {% if conversation.last_message.sender.id == person.id %}
+                                                                    {{conversation.last_message.message}}
+                                                                {% else %}
+                                                                    You: {{conversation.last_message.message}}
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %}</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                {% else %}
+                                    <a href="/home/change/{{person.id}}">
+                                        <div data-target="#person{{person.id}}" class="person row ">
+                                            <img data-target="#person{{person.id}}" src="{% static 'myapp/images/user.png' %}" alt="profile-photo">
+                                            <div data-target="#person{{person.id}}" class="row person-info">
+                                                <h3 data-target="#person{{person.id}}">{{person.first_name}} {{person.last_name}}</h3>
+                                                <p data-target="#person{{person.id}}">
+                                                    {% for key, conversation in conversations.items %}
+                                                        {% if key == person.id|stringformat:"i" %}
+                                                            {% if not conversation.last_message %}
+                                                                
+                                                            {% else %}
+                                                                {% if conversation.last_message.sender.id == person.id %}
+                                                                    {{conversation.last_message.message}}
+                                                                {% else %}
+                                                                    You: {{conversation.last_message.message}}
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %}</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                {% endif %}
+                            {% elif not currentReceiver %}
+                                <a href="/home/change/{{person.id}}">
+                                    <div data-target="#person{{person.id}}" class="person row">
+                                        <img data-target="#person{{person.id}}" src="{% static 'myapp/images/user.png' %}" alt="profile-photo">
+                                        <div data-target="#person{{person.id}}" class="row person-info">
+                                            <h3 data-target="#person{{person.id}}">{{person.first_name}} {{person.last_name}}</h3>
+                                            <p data-target="#person{{person.id}}">
+                                                {% for key, conversation in conversations.items %}
+                                                    {% if key == person.id|stringformat:"i" %}
+                                                        {% if not conversation.last_message %}
+                                                            
+                                                        {% else %}
+                                                            {% if conversation.last_message.sender.id == person.id %}
+                                                                {{conversation.last_message.message}}
+                                                            {% else %}
+                                                                You: {{conversation.last_message.message}}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            {% endif %}
+                        {% endwith %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="messages-container panel {{active1}}" id="example">
+                <div class="messages display-box">
+                    <div class="message-row message-group received">
+                        <div class="message received">
+                            <p>Click on any of your contacts to the left to start chatting!</p>
+                        </div>
+                        <div class="message received">
+                            <p>Currently, image upload functionailty is not implemented.</p>
+                        </div>
+                        <div class="message received">
+                            <p>Still working the kinks out on that one.</p>
+                        </div>
+                    </div>
+                </div>
+                <form action="/home" method="post" class="create">
+                    {% csrf_token %}
+                    <input type="text" name="message" placeholder="Type a message...">
+                </form>
+            </div>
+            {% for person in people %}
+                {% if currentReceiver %}
+                    {% if person.id == currentReceiver %}
+                        <div class="messages-container panel active" id="person{{person.id}}">
+                            <div class="messages display-box">
+                                {% for key, conversation in conversations.items %}
+                                    {% if key == person.id|stringformat:"i" %}
+                                        {% for message in conversation.messages %}
+                                            {% if message.sender.id == user.id %}
+                                                <div class="message-row">
+                                                    <div class="message sent">
+                                                        <p>{{message.message}}</p>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                            {% if message.sender.id == person.id %}
+                                                <div class="message-row">
+                                                    <div class="message received">
+                                                        <p>{{message.message}}</p>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <form action="/message/{{person.id}}" method="post" class="create">
+                                {% csrf_token %}
+                                <input type="text" name="message" placeholder="Type a message...">
+                            </form>
+                        </div>
+                    {% else %}
+                        <div class="messages-container panel" id="person{{person.id}}">
+                            <div class="messages display-box">
+                                {% for key, conversation in conversations.items %}
+                                    {% if key == person.id|stringformat:"i" %}
+                                        {% for message in conversation.messages %}
+                                            {% if message.sender.id == user.id %}
+                                                <div class="message-row">
+                                                    <div class="message sent">
+                                                        <p>{{message.message}}</p>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                            {% if message.sender.id == person.id %}
+                                                <div class="message-row">
+                                                    <div class="message received">
+                                                        <p>{{message.message}}</p>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <form action="/message/{{person.id}}" method="post" class="create">
+                                {% csrf_token %}
+                                <input type="text" name="message" placeholder="Type a message...">
+                            </form>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="messages-container panel" id="person{{person.id}}">
+                        <div class="messages display-box">
+                            {% for key, conversation in conversations.items %}
+                                {% if key == person.id|stringformat:"i" %}
+                                    {% for message in conversation.messages %}
+                                        {% if message.sender.id == user.id %}
+                                            <div class="message-row">
+                                                <div class="message sent">
+                                                    <p>{{message.message}}</p>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {% if message.sender.id == person.id %}
+                                            <div class="message-row">
+                                                <div class="message received">
+                                                    <p>{{message.message}}</p>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <form action="/message/{{person.id}}" method="post" class="create">
+                            {% csrf_token %}
+                            <input type="text" name="message" placeholder="Type a message...">
+                        </form>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        var tabs = document.querySelector(".tabs")
+        var panels = document.querySelectorAll(".panel")
+        var description = document.querySelector(".description")
+        var persons = document.querySelectorAll(".person")
+
+        tabs.addEventListener('click', function(e){
+            if(e.target.tagName == "DIV" | e.target.tagName == "P" | e.target.tagName == "H3" | e.target.tagName == "IMG"){
+                var targetPanel = document.querySelector(e.target.dataset.target);
+                panels.forEach(function(panel){
+                    if(panel == targetPanel){
+                        panel.classList.add('active');
+                    } else {
+                        panel.classList.remove('active');
+                    }
+                })
+            }
+        })
+        description.addEventListener('click', function(e){
+            if(e.target.tagName == "H3" | e.target.tagName == "FORM"){
+                persons.forEach(function(person){
+                    person.classList.remove('active');
+                })
+            }
+        })
+    </script>
+</body>
+</html>
